@@ -66,6 +66,11 @@
             margin-top: 20px;
             font-weight: bold;
         }
+        #fechaHora {
+            font-size: 18px;
+            color: #555; /* Color del texto de la fecha y hora */
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -95,9 +100,10 @@
     <button id="girar" onclick="girarRuleta()" style="display: none;">Girar</button>
     
     <div id="resultadoTexto"></div> <!-- Espacio para mostrar el resultado -->
+    <div id="fechaHora"></div> <!-- Espacio para mostrar la fecha y hora -->
 
     <script>
-        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', 'lpoñ']; // Códigos de un solo uso
+        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', 'pyu']; // Códigos de un solo uso
         let girada = false;
 
         function verificarCodigo() {
@@ -128,6 +134,7 @@
             const ruleta = document.getElementById('ruleta');
             const resultado = document.getElementById('resultado');
             const resultadoTexto = document.getElementById('resultadoTexto');
+            const fechaHora = document.getElementById('fechaHora');
             const angulo = Math.floor(Math.random() * 360) + 720; // Gira varias veces
 
             // Cambia el color de la ruleta al girar
@@ -137,9 +144,12 @@
 
             setTimeout(() => {
                 resultadoTexto.innerText = `Resultado (Haz captura): ${determinarResultado(angulo)}`;
+                // Mostrar la fecha y hora
+                const fechaActual = new Date();
+                fechaHora.innerText = `Fecha y hora: ${fechaActual.toLocaleString()}`;
                 resultado.style.backgroundColor = 'blue'; // Color de fondo del resultado
                 ruleta.style.backgroundColor = 'blue'; // Restablece el color
-            }, 4000); // 2 segundos para que termine la animación
+            }, 4000); // 4 segundos para que termine la animación
         }
 
         function determinarResultado(angulo) {
