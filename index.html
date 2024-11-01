@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruleta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        #ruleta {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 16px solid black; /* Borde negro */
+            display: none; /* Inicialmente ocultamos la ruleta */
+            transition: background-color 0.5s ease; /* Transición de color */
+            background-color: blue; /* Color azul */
+        }
+        .sector {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: blue; /* Color de los sectores igual al de la ruleta */
+            transform-origin: 100% 100%;
+            clip-path: polygon(100% 100%, 0 0, 100% 0);
+            display: none; /* Ocultar los sectores */
+        }
+        #resultado {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: transform 4s cubic-bezier(0.33, 0.67, 0.67, 1);
+            transform-origin: center;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #codigoContainer {
+            margin-bottom: 20px;
+        }
+        #codigoInput {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #resultadoTexto {
+            font-size: 24px;
+            color: #333; /* Color del texto del resultado */
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ruleta Fantasy</h1>
+    <div id="codigoContainer">
+        <input type="text" id="codigoInput" placeholder="Ingresa el código" />
+        <button onclick="verificarCodigo()">Verificar Código</button>
+        <p id="mensaje" style="color: red;"></p>
+    </div>
+    <div id="ruleta">
+        <div class="sector" style="transform: rotate(0deg);"></div>
+        <div class="sector" style="transform: rotate(30deg);"></div>
+        <div class="sector" style="transform: rotate(60deg);"></div>
+        <div class="sector" style="transform: rotate(90deg);"></div>
+        <div class="sector" style="transform: rotate(120deg);"></div>
+        <div class="sector" style="transform: rotate(150deg);"></div>
+        <div class="sector" style="transform: rotate(180deg);"></div>
+        <div class="sector" style="transform: rotate(210deg);"></div>
+        <div class="sector" style="transform: rotate(240deg);"></div>
+        <div class="sector" style="transform: rotate(270deg);"></div>
+        <div class="sector" style="transform: rotate(300deg);"></div>
+        <div class="sector" style="transform: rotate(330deg);"></div>
+        <div class="sector" style="transform: rotate(360deg);"></div>
+        <div id="resultado"></div>
+    </div>
+    <button id="girar" onclick="girarRuleta()" style="display: none;">Girar</button>
+    
+    <div id="resultadoTexto"></div> <!-- Espacio para mostrar el resultado -->
+
+    <script>
+        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', '1Prueba8', '1Prueba9', '1Prueba10',]; // Códigos de un solo uso
+        let girada = false;
+
+        function verificarCodigo() {
+            const codigoInput = document.getElementById('codigoInput').value;
+            const mensaje = document.getElementById('mensaje');
+            const ruleta = document.getElementById('ruleta');
+            const botonGirar = document.getElementById('girar');
+
+            if (localStorage.getItem(codigoInput)) {
+                mensaje.textContent = 'El código ya ha sido utilizado.';
+                return;
+            }
+
+            if (codigosValidos.includes(codigoInput)) {
+                localStorage.setItem(codigoInput, 'usado'); // Marca el código como utilizado
+                mensaje.textContent = 'Código verificado. ¡Puedes girar la ruleta!';
+                ruleta.style.display = 'block'; // Mostrar la ruleta
+                botonGirar.style.display = 'block'; // Mostrar el botón para girar
+            } else {
+                mensaje.textContent = 'Código incorrecto. Inténtalo de nuevo.';
+            }
+        }
+
+        function girarRuleta() {
+            if (girada) return;
+
+            girada = true;
+            const ruleta = document.getElementById('ruleta');
+            const resultado = document.getElementById('resultado');
+            const resultadoTexto = document.getElementById('resultadoTexto');
+            const angulo = Math.floor(Math.random() * 360) + 720; // Gira varias veces
+
+            // Cambia el color de la ruleta al girar
+            ruleta.style.backgroundColor = '#FF5733'; // Color cuando gira
+
+            resultado.style.transform = `rotate(${angulo}deg)`;
+
+            setTimeout(() => {
+                resultadoTexto.innerText = `Resultado (Haz captura): ${determinarResultado(angulo)}`;
+                resultado.style.backgroundColor = 'blue'; // Color de fondo del resultado
+                ruleta.style.backgroundColor = 'blue'; // Restablece el color
+            }, 4000); // 2 segundos para que termine la animación
+        }
+
+        function determinarResultado(angulo) {
+            const sectors = [
+                { name: '+10 m', probability: 15.15 },
+                { name: 'Anular candado', probability: 9.09 },
+                { name: 'Bloquear jugador', probability: 9.09 },
+                { name: 'Candado extra', probability: 15.15 },
+                { name: 'Roba carta', probability: 6.06 },
+                { name: 'Comodín', probability: 6.06 },
+                { name: 'Anular equipo', probability: 6.06 },
+                { name: 'Protección', probability: 6.06 },
+                { name: 'Robar 5 m', probability: 6.06 },
+                { name: 'Clausulazo fuera de tiempo', probability: 6.06 },
+                { name: 'Sin negros', probability: 3.04 },
+                { name: 'Anular nacionalidad', probability: 6.06 },
+                { name: 'Alineación que quieras', probability: 6.06 },
+            ];
+
+            const index = Math.floor((angulo % 360) / (360 / sectors.length)); // Obtener el índice del sector basado en el ángulo
+            return sectors[index].name; // Retornar el nombre del sector
+        }
+    </script>
+
+</body>
+</html>
