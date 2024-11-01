@@ -71,6 +71,11 @@
             color: #555; /* Color del texto de la fecha y hora */
             margin-top: 10px;
         }
+        #codigoUsado {
+            font-size: 20px;
+            color: #333; /* Color del texto del código usado */
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -101,10 +106,12 @@
     
     <div id="resultadoTexto"></div> <!-- Espacio para mostrar el resultado -->
     <div id="fechaHora"></div> <!-- Espacio para mostrar la fecha y hora -->
+    <div id="codigoUsado"></div> <!-- Espacio para mostrar el código utilizado -->
 
     <script>
-        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', 'David2', 'Patrick2', 'Alejandro2', 'Joel2', 'Abel2', 'Julián2', 'David3', 'Patrick3', 'Alejandro3', 'Joel3', 'Abel3', 'Julián3', 'David4', 'Patrick4', 'Alejandro4', 'Joel4', 'Abel4', 'Julián4', 'David5', 'Patrick5', 'Alejandro5', 'Joel5', 'Abel5', 'Julián5', 'David6', 'Patrick6', 'Alejandro6', 'Joel6', 'Abel6', 'Julián6', 'David7', 'Patrick7', 'Alejandro7', 'Joel7', 'Abel7', 'Julián7', 'David8', 'Patrick8', 'Alejandro8', 'Joel8', 'Abel8', 'Julián8', 'David9', 'Patrick9', 'Alejandro9', 'Joel9', 'Abel9', 'Julián9', 'pruebamañana' ]; // Códigos de un solo uso
+        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', 'David2', 'Patrick2', 'Alejandro2', 'Joel2', 'Abel2', 'Julián2', 'David3', 'Patrick3', 'Alejandro3', 'Joel3', 'Abel3', 'Julián3', 'David4', 'Patrick4', 'Alejandro4', 'Joel4', 'Abel4', 'Julián4', 'David5', 'Patrick5', 'Alejandro5', 'Joel5', 'Abel5', 'Julián5', 'David6', 'Patrick6', 'Alejandro6', 'Joel6', 'Abel6', 'Julián6', 'David7', 'Patrick7', 'Alejandro7', 'Joel7', 'Abel7', 'Julián7', 'David8', 'Patrick8', 'Alejandro8', 'Joel8', 'Abel8', 'Julián8', 'David9', 'Patrick9', 'Alejandro9', 'Joel9', 'Abel9', 'Julián9', 'pruebamañana', 'prueba009']; // Códigos de un solo uso
         let girada = false;
+        let codigoUtilizado = ''; // Variable para almacenar el código utilizado
 
         function verificarCodigo() {
             const codigoInput = document.getElementById('codigoInput').value;
@@ -119,6 +126,7 @@
 
             if (codigosValidos.includes(codigoInput)) {
                 localStorage.setItem(codigoInput, 'usado'); // Marca el código como utilizado
+                codigoUtilizado = codigoInput; // Guardar el código utilizado
                 mensaje.textContent = 'Código verificado. ¡Puedes girar la ruleta!';
                 ruleta.style.display = 'block'; // Mostrar la ruleta
                 botonGirar.style.display = 'block'; // Mostrar el botón para girar
@@ -135,6 +143,7 @@
             const resultado = document.getElementById('resultado');
             const resultadoTexto = document.getElementById('resultadoTexto');
             const fechaHora = document.getElementById('fechaHora');
+            const codigoUsadoDiv = document.getElementById('codigoUsado'); // Obtener el elemento donde mostrar el código
             const angulo = Math.floor(Math.random() * 360) + 720; // Gira varias veces
 
             // Cambia el color de la ruleta al girar
@@ -147,6 +156,8 @@
                 // Mostrar la fecha y hora
                 const fechaActual = new Date();
                 fechaHora.innerText = `Fecha y hora: ${fechaActual.toLocaleString()}`;
+                // Mostrar el código utilizado
+                codigoUsadoDiv.innerText = `Código utilizado: ${codigoUtilizado}`;
                 resultado.style.backgroundColor = 'blue'; // Color de fondo del resultado
                 ruleta.style.backgroundColor = 'blue'; // Restablece el color
             }, 4000); // 4 segundos para que termine la animación
