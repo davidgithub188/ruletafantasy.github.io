@@ -3,37 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruleta</title>
+    <title>Ruleta Fantasy</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f7f7f7;
+            background: linear-gradient(135deg, #83a4d4, #b6fbff);
+            margin: 0;
+            color: #333;
         }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #codigoContainer {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #4a90e2;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007aff;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #007aff;
+            transform: scale(1.05);
+        }
+
         #ruleta {
             width: 300px;
             height: 300px;
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            border: 16px solid black; /* Borde negro */
             display: none; /* Inicialmente ocultamos la ruleta */
-            transition: background-color 0.5s ease; /* Transición de color */
-            background-color: blue; /* Color azul */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transform: rotate(0deg); /* Inicialmente sin rotación */
+            transition: transform 4s cubic-bezier(0.33, 0.67, 0.67, 1);
+            border: 10px solid #4a90e2; /* Añadir borde azul */
+            box-sizing: border-box; /* Incluir borde en el tamaño total */
         }
+
         .sector {
             position: absolute;
             width: 50%;
             height: 50%;
-            background-color: blue; /* Color de los sectores igual al de la ruleta */
-            transform-origin: 100% 100%;
             clip-path: polygon(100% 100%, 0 0, 100% 0);
-            display: none; /* Ocultar los sectores */
+            transform-origin: 100% 100%;
         }
+
         #resultado {
             position: absolute;
             width: 100%;
@@ -44,37 +90,53 @@
             font-size: 24px;
             color: white;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            transition: transform 4s cubic-bezier(0.33, 0.67, 0.67, 1);
-            transform-origin: center;
+            transition: opacity 0.5s;
         }
-        button {
+
+        #resultadoTexto, #fechaHora, #codigoUsado {
+            font-size: 20px;
             margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
+            text-align: center;
         }
-        #codigoContainer {
-            margin-bottom: 20px;
-        }
-        #codigoInput {
-            padding: 10px;
-            font-size: 16px;
-        }
+
         #resultadoTexto {
-            font-size: 24px;
-            color: #333; /* Color del texto del resultado */
-            margin-top: 20px;
+            font-weight: bold; /* Hacer el resultado en negrita */
+            animation: fadeIn 0.5s ease; /* Añadir animación de entrada */
+        }
+
+        #mensaje {
+            color: red;
             font-weight: bold;
         }
-        #fechaHora {
-            font-size: 18px;
-            color: #555; /* Color del texto de la fecha y hora */
-            margin-top: 10px;
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        #codigoUsado {
-            font-size: 20px;
-            color: #333; /* Color del texto del código usado */
-            margin-top: 20px;
+
+        @media (max-width: 600px) {
+            #ruleta {
+                width: 200px;
+                height: 200px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+
+            input[type="text"] {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -84,34 +146,32 @@
     <div id="codigoContainer">
         <input type="text" id="codigoInput" placeholder="Ingresa el código" />
         <button onclick="verificarCodigo()">Verificar Código</button>
-        <p id="mensaje" style="color: red;"></p>
+        <p id="mensaje"></p>
     </div>
     <div id="ruleta">
-        <div class="sector" style="transform: rotate(0deg);"></div>
-        <div class="sector" style="transform: rotate(30deg);"></div>
-        <div class="sector" style="transform: rotate(60deg);"></div>
-        <div class="sector" style="transform: rotate(90deg);"></div>
-        <div class="sector" style="transform: rotate(120deg);"></div>
-        <div class="sector" style="transform: rotate(150deg);"></div>
-        <div class="sector" style="transform: rotate(180deg);"></div>
-        <div class="sector" style="transform: rotate(210deg);"></div>
-        <div class="sector" style="transform: rotate(240deg);"></div>
-        <div class="sector" style="transform: rotate(270deg);"></div>
-        <div class="sector" style="transform: rotate(300deg);"></div>
-        <div class="sector" style="transform: rotate(330deg);"></div>
-        <div class="sector" style="transform: rotate(360deg);"></div>
-        <div id="resultado"></div>
+        <div class="sector" style="background-color: #FF5733; transform: rotate(0deg);"></div>
+        <div class="sector" style="background-color: #33FF57; transform: rotate(30deg);"></div>
+        <div class="sector" style="background-color: #3357FF; transform: rotate(60deg);"></div>
+        <div class="sector" style="background-color: #F1C40F; transform: rotate(90deg);"></div>
+        <div class="sector" style="background-color: #9B59B6; transform: rotate(120deg);"></div>
+        <div class="sector" style="background-color: #E74C3C; transform: rotate(150deg);"></div>
+        <div class="sector" style="background-color: #3498DB; transform: rotate(180deg);"></div>
+        <div class="sector" style="background-color: #1ABC9C; transform: rotate(210deg);"></div>
+        <div class="sector" style="background-color: #9B59B6; transform: rotate(240deg);"></div>
+        <div class="sector" style="background-color: #FF5733; transform: rotate(270deg);"></div>
+        <div class="sector" style="background-color: #33FF57; transform: rotate(300deg);"></div>
+        <div class="sector" style="background-color: #3357FF; transform: rotate(330deg);"></div>
     </div>
     <button id="girar" onclick="girarRuleta()" style="display: none;">Girar</button>
     
-    <div id="resultadoTexto"></div> <!-- Espacio para mostrar el resultado -->
-    <div id="fechaHora"></div> <!-- Espacio para mostrar la fecha y hora -->
-    <div id="codigoUsado"></div> <!-- Espacio para mostrar el código utilizado -->
+    <div id="resultadoTexto"></div>
+    <div id="fechaHora"></div>
+    <div id="codigoUsado"></div>
 
     <script>
-        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', 'David2', 'Patrick2', 'Alejandro2', 'Joel2', 'Abel2', 'Julián2', 'David3', 'Patrick3', 'Alejandro3', 'Joel3', 'Abel3', 'Julián3', 'David4', 'Patrick4', 'Alejandro4', 'Joel4', 'Abel4', 'Julián4', 'David5', 'Patrick5', 'Alejandro5', 'Joel5', 'Abel5', 'Julián5', 'David6', 'Patrick6', 'Alejandro6', 'Joel6', 'Abel6', 'Julián6', 'David7', 'Patrick7', 'Alejandro7', 'Joel7', 'Abel7', 'Julián7', 'David8', 'Patrick8', 'Alejandro8', 'Joel8', 'Abel8', 'Julián8', 'David9', 'Patrick9', 'Alejandro9', 'Joel9', 'Abel9', 'Julián9', 'pruebamañana']; // Códigos de un solo uso
-        let girada = false;
-        let codigoUtilizado = ''; // Variable para almacenar el código utilizado
+        const codigosValidos = ['David1', 'Patrick1', 'Alejandro1', 'Joel1', 'Abel1', 'Julián1', 'David2', 'Patrick2', 'Alejandro2', 'Joel2', 'Abel2', 'Julián2', 'David3', 'Patrick3', 'Alejandro3', 'Joel3', 'Abel3', 'Julián3', 'David4', 'Patrick4', 'Alejandro4', 'Joel4', 'Abel4', 'Julián4', 'David5', 'Patrick5', 'Alejandro5', 'Joel5', 'Abel5', 'Julián5', 'David6', 'Patrick6', 'Alejandro6', 'Joel6', 'Abel6', 'Julián6', 'David7', 'Patrick7', 'Alejandro7', 'Joel7', 'Abel7', 'Julián7', 'David8', 'Patrick8', 'Alejandro8', 'Joel8', 'Abel8', 'Julián8', 'David9', 'Patrick9', 'Alejandro9', 'Joel9', 'Abel9', 'Julián9', 'fhy'];
+        let girada = false; // Control para la ruleta
+        let codigoUtilizado = '';
 
         function verificarCodigo() {
             const codigoInput = document.getElementById('codigoInput').value;
@@ -125,41 +185,33 @@
             }
 
             if (codigosValidos.includes(codigoInput)) {
-                localStorage.setItem(codigoInput, 'usado'); // Marca el código como utilizado
-                codigoUtilizado = codigoInput; // Guardar el código utilizado
+                localStorage.setItem(codigoInput, 'usado');
+                codigoUtilizado = codigoInput;
                 mensaje.textContent = 'Código verificado. ¡Puedes girar la ruleta!';
-                ruleta.style.display = 'block'; // Mostrar la ruleta
-                botonGirar.style.display = 'block'; // Mostrar el botón para girar
+                ruleta.style.display = 'block';
+                botonGirar.style.display = 'block';
             } else {
                 mensaje.textContent = 'Código incorrecto. Inténtalo de nuevo.';
             }
         }
 
         function girarRuleta() {
-            if (girada) return;
+            if (girada) return; // Si ya ha girado, no hace nada
 
-            girada = true;
+            girada = true; // Marcar que la ruleta ya ha sido girada
             const ruleta = document.getElementById('ruleta');
-            const resultado = document.getElementById('resultado');
             const resultadoTexto = document.getElementById('resultadoTexto');
             const fechaHora = document.getElementById('fechaHora');
-            const codigoUsadoDiv = document.getElementById('codigoUsado'); // Obtener el elemento donde mostrar el código
-            const angulo = Math.floor(Math.random() * 360) + 720; // Gira varias veces
-
-            // Cambia el color de la ruleta al girar
-            ruleta.style.backgroundColor = '#FF5733'; // Color cuando gira
-
-            resultado.style.transform = `rotate(${angulo}deg)`;
+            const codigoUsadoDiv = document.getElementById('codigoUsado');
+            
+            const angulo = Math.floor(Math.random() * 360) + 720; // Mínimo 2 giros completos
+            ruleta.style.transform = `rotate(${angulo}deg)`; // Gira la ruleta
 
             setTimeout(() => {
                 resultadoTexto.innerText = `Resultado (Haz captura): ${determinarResultado(angulo)}`;
-                // Mostrar la fecha y hora
                 const fechaActual = new Date();
                 fechaHora.innerText = `Fecha y hora: ${fechaActual.toLocaleString()}`;
-                // Mostrar el código utilizado
                 codigoUsadoDiv.innerText = `Código utilizado: ${codigoUtilizado}`;
-                resultado.style.backgroundColor = 'blue'; // Color de fondo del resultado
-                ruleta.style.backgroundColor = 'blue'; // Restablece el color
             }, 4000); // 4 segundos para que termine la animación
         }
 
@@ -180,8 +232,8 @@
                 { name: 'Alineación que quieras', probability: 6.06 },
             ];
 
-            const index = Math.floor((angulo % 360) / (360 / sectors.length)); // Obtener el índice del sector basado en el ángulo
-            return sectors[index].name; // Retornar el nombre del sector
+            const index = Math.floor((angulo % 360) / (360 / sectors.length));
+            return sectors[index].name;
         }
     </script>
 
