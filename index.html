@@ -64,12 +64,12 @@
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            display: none; /* Inicialmente ocultamos la ruleta */
+            display: none;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            transform: rotate(0deg); /* Inicialmente sin rotación */
+            transform: rotate(0deg);
             transition: transform 4s cubic-bezier(0.33, 0.67, 0.67, 1);
-            border: 10px solid #4a90e2; /* Añadir borde azul */
-            box-sizing: border-box; /* Incluir borde en el tamaño total */
+            border: 10px solid #4a90e2;
+            box-sizing: border-box;
         }
 
         .sector {
@@ -100,8 +100,8 @@
         }
 
         #resultadoTexto {
-            font-weight: bold; /* Hacer el resultado en negrita */
-            animation: fadeIn 0.5s ease; /* Añadir animación de entrada */
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
         }
 
         #mensaje {
@@ -169,8 +169,7 @@
     <div id="codigoUsado"></div>
 
     <script>
-        const codigosValidos = [
-  'David1','Patrick1','Alejandro1','Joel1','Abel1','Julián1',
+        const codigosValidos = ['David1','Patrick1','Alejandro1','Joel1','Abel1','Julián1',
   'David2','Patrick2','Alejandro2','Joel2','Abel2','Julián2',
   'David3','Patrick3','Alejandro3','Joel3','Abel3','Julián3',
   'David4','Patrick4','Alejandro4','Joel4','Abel4','Julián4',
@@ -208,9 +207,11 @@
   'David36','Patrick36','Alejandro36','Joel36','Abel36','Julián36',
   'David37','Patrick37','Alejandro37','Joel37','Abel37','Julián37',
   'David38','Patrick38','Alejandro38','Joel38','Abel38','Julián38',
-  'fhy11'
-];
+  'fhy11111'
+        ];
+        
         let codigoUtilizado = '';
+        let girada = false; // 🔹 Se define para evitar error y controlar un solo giro
 
         function verificarCodigo() {
             const codigoInput = document.getElementById('codigoInput').value;
@@ -235,23 +236,23 @@
         }
 
         function girarRuleta() {
-            if (girada) return; // Si ya ha girado, no hace nada
+            if (girada) return;
+            girada = true;
 
-            girada = true; // Marcar que la ruleta ya ha sido girada
             const ruleta = document.getElementById('ruleta');
             const resultadoTexto = document.getElementById('resultadoTexto');
             const fechaHora = document.getElementById('fechaHora');
             const codigoUsadoDiv = document.getElementById('codigoUsado');
             
-            const angulo = Math.floor(Math.random() * 360) + 720; // Mínimo 2 giros completos
-            ruleta.style.transform = `rotate(${angulo}deg)`; // Gira la ruleta
+            const angulo = Math.floor(Math.random() * 360) + 720;
+            ruleta.style.transform = `rotate(${angulo}deg)`;
 
             setTimeout(() => {
                 resultadoTexto.innerText = `Resultado (Haz captura): ${determinarResultado(angulo)}`;
                 const fechaActual = new Date();
                 fechaHora.innerText = `Fecha y hora: ${fechaActual.toLocaleString()}`;
                 codigoUsadoDiv.innerText = `Código utilizado: ${codigoUtilizado}`;
-            }, 4000); // 4 segundos para que termine la animación
+            }, 4000);
         }
 
         function determinarResultado(angulo) {
