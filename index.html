@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -93,7 +93,7 @@
             transition: opacity 0.5s;
         }
 
-        #resultadoTexto, #fechaHora, #codigoUsado, #dispositivoInfo {
+        #resultadoTexto, #fechaHora, #codigoUsado {
             font-size: 20px;
             margin-top: 20px;
             text-align: center;
@@ -167,7 +167,6 @@
     <div id="resultadoTexto"></div>
     <div id="fechaHora"></div>
     <div id="codigoUsado"></div>
-    <div id="dispositivoInfo"></div>
 
     <script>
         const codigosValidos = ['David1','Patrick1','Alejandro1','Joel1','Abel1','Julián1',
@@ -208,10 +207,11 @@
   'David36','Patrick36','Alejandro36','Joel36','Abel36','Julián36',
   'David37','Patrick37','Alejandro37','Joel37','Abel37','Julián37',
   'David38','Patrick38','Alejandro38','Joel38','Abel38','Julián38',
-  'fhe'];
-
+  'fhy11111'
+        ];
+        
         let codigoUtilizado = '';
-        let girada = false;
+        let girada = false; // 🔹 Se define para evitar error y controlar un solo giro
 
         function verificarCodigo() {
             const codigoInput = document.getElementById('codigoInput').value;
@@ -243,7 +243,6 @@
             const resultadoTexto = document.getElementById('resultadoTexto');
             const fechaHora = document.getElementById('fechaHora');
             const codigoUsadoDiv = document.getElementById('codigoUsado');
-            const dispositivoInfo = document.getElementById('dispositivoInfo');
             
             const angulo = Math.floor(Math.random() * 360) + 720;
             ruleta.style.transform = `rotate(${angulo}deg)`;
@@ -253,7 +252,6 @@
                 const fechaActual = new Date();
                 fechaHora.innerText = `Fecha y hora: ${fechaActual.toLocaleString()}`;
                 codigoUsadoDiv.innerText = `Código utilizado: ${codigoUtilizado}`;
-                dispositivoInfo.innerText = `Dispositivo: ${navigator.userAgent}`;
             }, 4000);
         }
 
